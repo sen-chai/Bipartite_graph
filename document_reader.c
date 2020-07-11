@@ -6,48 +6,55 @@
 #define MOVIE 1
 
 // ler nome e dizer se o proximo eh filme ou ator
-int read_name(FILE*file,char**name){
-    int read_counter = 0;
-    while((*name)[read_counter] !='/' ){
-        // fscanf(file,"%c",(*name)[read_counter++]);
-        (*name)[read_counter++] = getc(file);
-        if((*name)[read_counter] =='\n'){
-            (*name)[read_counter] = '\0';
-            return MOVIE;
+int read_name(FILE*file,char**name ){
+    int read_counter = 0,flag;
+    char c = '0';
+    while( 1 ){
+        fscanf(file,"%c",&c);
+        if(feof(file)){
+            flag = EOF;
+            break;
         }
+        if(c =='\n'){
+            name[read_counter] = '\0';
+            flag = MOVIE;
+            break;
+        }
+        if(c == '/'){
+            flag = ACTOR;
+            break;
+        }
+        (*name)[read_counter++] = c;
     }
     (*name)[read_counter] = '\0';
-    return ACTOR;
+    return flag;
 }
-void load_file()
-{
-    printf("start file");
-    FILE *file;
-    // role pode ser MOVIE ou ACTOR
+void load_file(FILE*file){
+    // role pode ser MOVIE, ACTOR ou EOF
     int role = MOVIE;
-    char*tmp = (char*) malloc(999*sizeof(char));
-
-    file = fopen("input-top-grossing.txt", "r");
-    assert(file);
-
-    while (!feof(file)){
+    char*name = (char*) malloc(999*sizeof(char));
+    while (role!=EOF){
+        role = read_name(file,&name);
         if(role==MOVIE){
-            role = read_name(file,tmp);
-            
-            printf("- %s",&tmp);
-            // insere tmp como vertice filme
+            printf("\nMOVIE %d %s\n",role,name);
+
+            // insere name como vertice filme
             // definir filme do momento
         }
         if(role==ACTOR){
-            role = read_name(file,tmp);
-            printf("- %s",&tmp);
-            // insere tmp como ator
+            printf("\nACTOR %d %s\n",role,name);
+
+            // insere name como ator
             // ligar ator ao filme que participou
         }
     }
-    fclose(file);
+    free(name);
 }
-int main(){
-    printf("start main");
-    load_file();
+int main(void){
+    printf("\n\n");
+    FILE *file = fopen("test.txt", "r");
+    // FILE *file = fopen("input-top-grossing.txt", "r");
+    assert(file);
+    load_file(file);
+    fclose(file);
 }
