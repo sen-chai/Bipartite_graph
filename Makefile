@@ -1,4 +1,4 @@
 all:
-	gcc -o main.o main.c graph.c -I.
+	gcc -o main.o main.c -I.
 go:
-	gcc -o main.o main.c graph.c -I. && ./main.o
+	gcc -o main.o main.c -I. && ./main.o

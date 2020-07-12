@@ -1,9 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
+#include <graph.h>
 
-#define ACTOR 0
-#define MOVIE 1
 
 // ler nome e dizer se o proximo eh filme ou ator
 int read_name(FILE*file,char**name ){
