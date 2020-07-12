@@ -1,25 +1,27 @@
 #ifndef data_structures
-#define data_Structures
+#define data_structures
 
 #include <stdlib.h>
 #include <stdio.h>
 
 //representação generica das estruturas de dados
 struct{
-void* first;
-int counter;
+    void* first;
+    int counter;
 }generic_header;
 typedef struct generic_header LLIST;
 typedef struct generic_header QUEUE;
 typedef struct generic_header STACK;
 
-
+/*
+    # Eu acho que so precisaremos da QUEUE. 
+*/
 //representação generica dos elementos
 typedef struct elem{
-char* name;
-int is_actor;
-struct elem* next;
-void* content;
+    char* name;
+    int is_actor;
+    struct elem* next;
+    void* content;
 }ELEM;
 
 //Funçoes da lista encadeada

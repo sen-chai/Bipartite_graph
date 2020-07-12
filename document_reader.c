@@ -29,32 +29,3 @@ int read_name(FILE*file,char**name ){
     (*name)[read_counter] = '\0';
     return flag;
 }
-void load_file(FILE*file){
-    // role pode ser MOVIE, ACTOR ou EOF
-    int role = MOVIE;
-    char*name = (char*) malloc(999*sizeof(char));
-    while (role!=EOF){
-        role = read_name(file,&name);
-        if(role==MOVIE){
-            printf("\nMOVIE %d %s\n",role,name);
-
-            // insere name como vertice filme
-            // definir filme do momento
-        }
-        if(role==ACTOR){
-            printf("\nACTOR %d %s\n",role,name);
-
-            // insere name como ator
-            // ligar ator ao filme que participou
-        }
-    }
-    free(name);
-}
-int main(void){
-    printf("\n\n");
-    FILE *file = fopen("test.txt", "r");
-    // FILE *file = fopen("input-top-grossing.txt", "r");
-    assert(file);
-    load_file(file);
-    fclose(file);
-}
