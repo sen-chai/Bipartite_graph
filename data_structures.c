@@ -4,13 +4,19 @@
 #include "string.h"
 #include "data_structures.h"
 
+ELEM *create_elem(char *name, void *content, int is_actor)
+{
+    ELEM *elem = calloc(1, sizeof(ELEM));
+    //Modificar aqui para alocação dinamica
+    strcpy(elem->name, name);
+    elem->is_actor = is_actor;
+    elem->content = content;
+    return elem;
+}
 //Funçoes da lista encadeada
 LLIST *new_llist()
 {
-    LLIST *list = malloc(sizeof(LLIST));
-    list->counter = 0;
-    list->first = NULL;
-    return list;
+    return calloc(1, sizeof(LLIST));
 }
 void add_llist(LLIST *llist, ELEM *elem)
 {
@@ -34,14 +40,22 @@ void free_llist(LLIST *llist)
     free(llist);
 }
 
+ELEM *search_string_list(LLIST *llist, char *string)
+{
+    ELEM *elem;
+    int i;
+    elem = llist->first;
+    while (elem && strcmp(string, elem->name) && (elem = elem->next))
+        i++;
+    if(elem)
+        return elem;
+    else 
+        return NULL;
+}
 //Funçoes da fila
 QUEUE *new_queue()
 {
-    QUEUE* queue = malloc(sizeof(QUEUE));
-    queue->counter = 0;
-    queue->first = NULL;
-    queue->last = NULL;
-    return queue;
+    return calloc(1, sizeof(QUEUE));
 }
 void enqueue(QUEUE *queue, ELEM *elem)
 {
@@ -53,22 +67,25 @@ void enqueue(QUEUE *queue, ELEM *elem)
     queue->last = elem;
     queue->counter++;
 }
-ELEM *dequeue(QUEUE *queue){
-    if(queue_is_empty(queue))
+ELEM *dequeue(QUEUE *queue)
+{
+    if (queue_is_empty(queue))
         return NULL;
 
     ELEM *elem = queue->first;
     queue->first = elem->next;
     queue->counter--;
-    if(queue_is_empty(queue))
+    if (queue_is_empty(queue))
         queue->last = NULL;
-        return elem;
+    return elem;
 }
 
-int queue_is_empty(QUEUE *queue){
+int queue_is_empty(QUEUE *queue)
+{
     return queue->counter == 0;
 }
-void free_queue(QUEUE *queue){
+void free_queue(QUEUE *queue)
+{
     int i;
     ELEM *elem;
     for (i = 0; i < queue->counter; i++)
@@ -80,40 +97,40 @@ void free_queue(QUEUE *queue){
     free(queue);
 }
 //testando
-int main(){
-ELEM *elem1, *elem2, *elem3;
-elem1 = malloc(sizeof(ELEM));
-elem2 = malloc(sizeof(ELEM));
-elem3 = malloc(sizeof(ELEM));
-strcpy(elem1->name ,"list1");
-strcpy(elem2->name ,"list2");
-strcpy(elem3->name ,"list3");
+/*int main()
+{
+    ELEM *elem1, *elem2, *elem3, *searched;
+    elem1 = create_elem("list1", NULL, 1);
+    elem2 = create_elem("list2", NULL, 1);
+    elem3 = create_elem("list3", NULL, 1);
 
-//teste da lista
-LLIST *llist = new_llist();
-add_llist(llist,elem1);
-add_llist(llist,elem2);
-add_llist(llist,elem3);
-//lista insere sempre na frente, imprimir na ordem contraria de entrada
-printf(" %s ", llist->first->name);
-printf(" %s ", llist->first->next->name);
-printf(" %s ", llist->first->next->next->name);
-free_llist(llist);
+    //teste da lista
+    LLIST *llist = new_llist();
+    add_llist(llist, elem1);
+    add_llist(llist, elem2);
+    add_llist(llist, elem3);
+    //teste da busca por string
+    searched = search_string_list(llist, "list1");
+    if(searched)
+    printf("ACHOU");   
+    //lista insere sempre na frente, imprimir na ordem contraria de entrada
+    printf(" %s ", llist->first->name);
+    printf(" %s ", llist->first->next->name);
+    printf(" %s ", llist->first->next->next->name);
+    free_llist(llist);
 
-//teste da fila
-elem1 = malloc(sizeof(ELEM));
-elem2 = malloc(sizeof(ELEM));
-elem3 = malloc(sizeof(ELEM));
-strcpy(elem1->name ,"queue1");
-strcpy(elem2->name ,"queue2");
-strcpy(elem3->name ,"queue3");
-QUEUE *queue = new_queue();
-//fila tem que imprimir na ordem de entrada
-enqueue(queue,elem1);
-enqueue(queue,elem2);
-enqueue(queue,elem3);
-printf(" %s ",dequeue(queue)->name);
-printf( "%s ",dequeue(queue)->name);
-printf(" %s ",dequeue(queue)->name);
-free_queue(queue);
-}
+    //teste da fila
+    elem1 = create_elem("queue1", NULL, 1);
+    elem2 = create_elem("queue2", NULL, 1);
+    elem3 = create_elem("queue3", NULL, 1);
+    QUEUE *queue = new_queue();
+    //fila tem que imprimir na ordem de entrada
+    enqueue(queue, elem1);
+    enqueue(queue, elem2);
+    enqueue(queue, elem3);
+    printf(" %s ", dequeue(queue)->name);
+    printf("%s ", dequeue(queue)->name);
+    printf(" %s ", dequeue(queue)->name);
+    dequeue(queue);
+    free_queue(queue);
+}*/

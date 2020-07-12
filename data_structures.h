@@ -26,9 +26,11 @@ typedef struct{
     # Eu acho que so precisaremos da QUEUE. 
 */
 
+ELEM* crate_elem(char* name, void* content, int is_actor);
 //Funçoes da lista encadeada
 LLIST* new_llist();
 void add_llist(LLIST* llist,ELEM* elem);
+ELEM* search_string_list(LLIST* llist, char* string); //Retorna void se não achar o elemento
 void free_llist(LLIST* llist);
 
 //Funçoes da fila
