@@ -23,7 +23,7 @@ int main(void){
             // printf("\nMOVIE %s\n",name);
 
             // retornar filme do momento e adiciona-lo
-            movie = ins_vertex(graph,name,MOVIE);
+            movie = ins_get_vertex(graph,name,MOVIE);
         }
         if(role==ACTOR){
             role = read_name(file,&name);
@@ -31,15 +31,23 @@ int main(void){
             // printf("\nACTOR %s\n",name);
 
             // retornar posicao do ator e inserir-lo
-            actor = ins_vertex(graph,name,ACTOR);
+            actor = ins_get_vertex(graph,name,ACTOR);
             // ligar ator ao filme que participou
             ins_edge(graph,movie,actor);
         }
     }
-    // fclose(file);
+    fclose(file);
     free(name);
 
-    printf("fred and closed\n");
-    print_graph(graph);
+    // print_graph(graph);
+
+    int origin = ins_get_vertex(graph,"Bacon, Kevin",ACTOR);
+    // int origin = ins_get_vertex(graph,"Yates, Jack",ACTOR);
+
+    int* antecedents = visit_breadth(graph,origin);
+    printf("antecedents\n");
+    for(int i = 0; i<graph->n_elem ; i++)
+        printf("%4d ",antecedents[i]);
+    printf("\n");
     return 0;
 }

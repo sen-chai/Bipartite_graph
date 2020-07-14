@@ -4,13 +4,11 @@
 #include "string.h"
 #include "data_structures.h"
 
-ELEM *create_elem(char *name, void *content, int is_actor)
+ELEM *create_elem(int new)
 {
     ELEM *elem = calloc(1, sizeof(ELEM));
     //Modificar aqui para alocação dinamica
-    strcpy(elem->name, name);
-    elem->is_actor = is_actor;
-    elem->content = content;
+    elem->id = new; 
     return elem;
 }
 //Funçoes da lista encadeada

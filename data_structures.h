@@ -6,10 +6,8 @@
 
 //representação generica das estruturas de dados
 typedef struct elem{
-    char name[50];
-    int is_actor;
+    int id;
     struct elem* next;
-    void* content;
 }ELEM;
 
 typedef struct{
