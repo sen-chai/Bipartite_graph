@@ -1,21 +1,47 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
+#include <graph.c>
+#include <graph.h>
+#include <document_reader.c>
 
-int pop(int*queue,int*count){
-    printf("size %d\n",*count*sizeof(int));
-    memcpy(queue,&queue[1],*count*sizeof(int));
-    (*count)--;
-}
+typedef struct{
+    int a;
+    int b;
+} DATA;
+
 int main(void){
-    int v[] = {1,2,3,4};
-    int has_waiting = 4;
-    pop(v,&has_waiting);
+    GRAPH* graph = init_graph();
+    int size = 9;
+    DATA data[] = {
+        {1,2},
+        {2,5},
+        {1,6},
+        {6,3},
+        {6,7},
+        {3,7},
+        {3,4},
+        {4,7},
+        {4,8},
+        {7,8},
+    };
+
+    char name[9];
+    int ind;
+    for(int i = 0; i<size ; i++){
+        sprintf(name,"name%02d",i);
+        ins_get_vertex(graph,name,ACTOR);
+    }
+    for(int i = 0; i<10 ; i++){
+        ins_edge(graph,data[i].a,data[i].b);
+    }
+    print_graph(graph);
+
+    int*antecedents = visit_breadth(graph,1);
+    for(int i = 0; i<9 ; i++){
+        printf("%3d ",antecedents[i]);
+    }
     printf("\n");
-    for(int i = 0; i<has_waiting; i++)
-        printf("%d ",v[i]);
-    printf("\n");
-    printf("waiting %d\n",has_waiting );
+
     return 0;
 }
 

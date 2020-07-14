@@ -9,8 +9,8 @@ int main(void){
     GRAPH* graph = init_graph();
 
     // Input de dados
-    FILE *file = fopen("test.txt", "r");
-    // FILE *file = fopen("input-top-grossing.txt", "r");
+    // FILE *file = fopen("test.txt", "r");
+    FILE *file = fopen("input-top-grossing.txt", "r");
     assert(file);
     // role pode ser MOVIE, ACTOR ou EOF
     int role = MOVIE, movie, actor;
@@ -39,15 +39,22 @@ int main(void){
     fclose(file);
     free(name);
 
-    // print_graph(graph);
+    print_graph(graph);
+    getchar();
 
     int origin = ins_get_vertex(graph,"Bacon, Kevin",ACTOR);
-    // int origin = ins_get_vertex(graph,"Yates, Jack",ACTOR);
 
-    int* antecedents = visit_breadth(graph,origin);
-    printf("antecedents\n");
-    for(int i = 0; i<graph->n_elem ; i++)
-        printf("%4d ",antecedents[i]);
-    printf("\n");
+    print_name(graph,origin);
+    printf("graph nelem %d\n",graph->n_elem);
+
+    int *antecedents = (int*) calloc(graph->n_elem,sizeof(int));
+
+    // int*antecedents = visit_breadth(graph,origin);
+    // int*ok=visit_breadth(graph,origin);
+
+    visit_breadth(graph,antecedents,origin);
+
+
+
     return 0;
 }

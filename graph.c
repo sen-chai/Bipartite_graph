@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <graph.h>
+#include <structures.c>
 
 typedef struct {
     char* name;
@@ -70,6 +71,7 @@ void print_graph(GRAPH*graph){
             printf(" / %d /",graph->elem[i].adjacents[j]);
         }
     }
+    printf("\n");
 }
 void print_name(GRAPH*graph,int pos){
     if(graph->elem[pos].role==MOVIE){
@@ -110,33 +112,35 @@ int pop(int*queue,int*n_elem){
     (*n_elem)--;
     return front;
 }
-int* visit_breadth(GRAPH*graph,int origin){
+void visit_breadth(GRAPH*graph,int*antecedents,int origin){
     int p, has_waiting = 0,adj_counter;
-    int *color = (int*) calloc(graph->n_elem,sizeof(int));
-    int *queue = (int*) calloc(graph->n_elem,sizeof(int));
-    int *antecedents = (int*) calloc(graph->n_elem,sizeof(int));
+    int color[graph->n_elem];
+    int queue[graph->n_elem];
+    // int *antecedents = (int*) calloc(graph->n_elem,sizeof(int));
     for(int i = 0; i<graph->n_elem; i++){
         antecedents[i] = -1;
+        color[i] = 0;
+        queue[i] =-1;
     }
 
     color[origin] = 1;
     push(queue,&has_waiting,origin);
-    printf("push %d ",queue[0]);
-    print_name(graph,queue[0]);
-    for(int i = 0; i<has_waiting; i++)
-        printf("_%d_",queue[i]);
-    printf("\n");
+
+    // printf("push %d ",queue[0]);
+    // print_name(graph,queue[0]);
+    // for(int i = 0; i<has_waiting; i++)
+    //     printf("_%d_",queue[i]);
+    // printf("\n");
 
     while(has_waiting > 0){
         origin = pop(queue,&has_waiting);
-
-        printf("pop %d ",origin);
-        for(int i = 0; i<has_waiting; i++)
-            printf("_%d_",queue[i]);
-        printf("\n");
+    
+        // printf("pop   %d  ",origin);
+        // for(int i = 0; i<has_waiting; i++)
+        //     printf("_%d_",queue[i]);
+        // printf("\n");
 
         p = first_adj(graph,origin);
-        printf("first_adj %d\n",p);
         adj_counter = 0;
 
         while(p >= 0){
@@ -145,17 +149,31 @@ int* visit_breadth(GRAPH*graph,int origin){
                 push(queue,&has_waiting,p);
                 antecedents[p] = origin;
 
-                printf("push %d ",p);
-                for(int i = 0; i<has_waiting; i++)
-                    printf("_%d_",queue[i]);
-                printf("\n");
+                // printf("push  %d  ",p);
+                // for(int i = 0; i<has_waiting; i++)
+                //     printf("_%d_",queue[i]);
+                // printf("\n");
 
             }
             p = next_adj(graph,origin,&adj_counter);
         }
         color[origin] = 2;
     }
-    free(color);
-    free(queue);
-    return antecedents;
+    // free(color);
+    // free(queue);
+
+    printf("\n\nantecedents\n");
+
+    int i;
+    for(i = 0; i<graph->n_elem ; i++)
+        printf("%4d ",antecedents[i]);
+    printf("\n");
+    printf("%d vrs %d\n",i,graph->n_elem);
+
+    // int* r = (int*) malloc(graph->n_elem*sizeof(int));
+    // for(int i = 0; i<graph->n_elem ; i++){
+    //     r[i] = antecedents[i];
+    // }
+    // return r;
+    // return antecedents;
 }

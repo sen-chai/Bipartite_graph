@@ -95,13 +95,13 @@ void free_queue(QUEUE *queue)
     free(queue);
 }
 //testando
-/*int main()
+int main()
 {
     ELEM *elem1, *elem2, *elem3, *searched;
-    elem1 = create_elem("list1", NULL, 1);
-    elem2 = create_elem("list2", NULL, 1);
-    elem3 = create_elem("list3", NULL, 1);
-
+/*
+    elem1 = create_elem(1);
+    elem2 = create_elem(2);
+    elem3 = create_elem(3);
     //teste da lista
     LLIST *llist = new_llist();
     add_llist(llist, elem1);
@@ -116,19 +116,19 @@ void free_queue(QUEUE *queue)
     printf(" %s ", llist->first->next->name);
     printf(" %s ", llist->first->next->next->name);
     free_llist(llist);
-
+*/
     //teste da fila
-    elem1 = create_elem("queue1", NULL, 1);
-    elem2 = create_elem("queue2", NULL, 1);
-    elem3 = create_elem("queue3", NULL, 1);
+    elem1 = create_elem(1);
+    elem2 = create_elem(2);
+    elem3 = create_elem(3);
     QUEUE *queue = new_queue();
     //fila tem que imprimir na ordem de entrada
     enqueue(queue, elem1);
     enqueue(queue, elem2);
     enqueue(queue, elem3);
-    printf(" %s ", dequeue(queue)->name);
-    printf("%s ", dequeue(queue)->name);
-    printf(" %s ", dequeue(queue)->name);
+    printf(" %s ", dequeue(queue)->id);
+    printf("%s ", dequeue(queue)->id);
+    printf(" %s ", dequeue(queue)->id);
     dequeue(queue);
     free_queue(queue);
-}*/
+}
