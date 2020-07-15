@@ -39,20 +39,21 @@ int main(void){
     fclose(file);
     free(name);
 
-    print_graph(graph);
-    getchar();
+    // print_graph(graph);
+    // getchar();
 
     int origin = ins_get_vertex(graph,"Bacon, Kevin",ACTOR);
 
     print_name(graph,origin);
-    printf("graph nelem %d\n",graph->n_elem);
+    // printf("graph nelem %d\n",graph->n_elem);
 
     int *antecedents = (int*) calloc(graph->n_elem,sizeof(int));
 
     // int*antecedents = visit_breadth(graph,origin);
     // int*ok=visit_breadth(graph,origin);
 
-    visit_breadth(graph,antecedents,origin);
+    // visit_breadth(graph,antecedents,origin);
+    visit_breadth(graph,origin);
 
 
 

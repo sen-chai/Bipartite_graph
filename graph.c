@@ -108,19 +108,20 @@ void push(int*queue,int*n_elem,int val){
 // retorna front, o primeiro item da fila
 int pop(int*queue,int*n_elem){
     int front = queue[0];
-    memcpy(queue,&queue[1],*n_elem*sizeof(int));
+    memcpy(queue,&queue[1],(*n_elem)*sizeof(int));
     (*n_elem)--;
     return front;
 }
-void visit_breadth(GRAPH*graph,int*antecedents,int origin){
-    int p, has_waiting = 0,adj_counter;
-    int color[graph->n_elem];
-    int queue[graph->n_elem];
-    // int *antecedents = (int*) calloc(graph->n_elem,sizeof(int));
+void visit_breadth(GRAPH*graph,int origin){
+    int p, has_waiting = 0, adj_counter;
+
+    int *color= (int*) calloc(graph->n_elem,sizeof(int));
+    int *queue= (int*) calloc(graph->n_elem,sizeof(int));
+    int *antecedents = (int*) calloc(graph->n_elem,sizeof(int));
     for(int i = 0; i<graph->n_elem; i++){
-        antecedents[i] = -1;
         color[i] = 0;
         queue[i] =-1;
+        antecedents[i] = -1;
     }
 
     color[origin] = 1;
@@ -133,19 +134,21 @@ void visit_breadth(GRAPH*graph,int*antecedents,int origin){
     // printf("\n");
 
     while(has_waiting > 0){
+        // printf(" %4d\n",has_waiting);
         origin = pop(queue,&has_waiting);
-    
+
         // printf("pop   %d  ",origin);
         // for(int i = 0; i<has_waiting; i++)
         //     printf("_%d_",queue[i]);
         // printf("\n");
-
         p = first_adj(graph,origin);
         adj_counter = 0;
+        // printf("P %d\n",p);
 
         while(p >= 0){
             if(color[p]==0){
                 color[p]=1;
+                // printf(" %4d\n",has_waiting);
                 push(queue,&has_waiting,p);
                 antecedents[p] = origin;
 
@@ -159,8 +162,8 @@ void visit_breadth(GRAPH*graph,int*antecedents,int origin){
         }
         color[origin] = 2;
     }
-    // free(color);
-    // free(queue);
+    free(color);
+    free(queue);
 
     printf("\n\nantecedents\n");
 
@@ -170,10 +173,4 @@ void visit_breadth(GRAPH*graph,int*antecedents,int origin){
     printf("\n");
     printf("%d vrs %d\n",i,graph->n_elem);
 
-    // int* r = (int*) malloc(graph->n_elem*sizeof(int));
-    // for(int i = 0; i<graph->n_elem ; i++){
-    //     r[i] = antecedents[i];
-    // }
-    // return r;
-    // return antecedents;
 }
