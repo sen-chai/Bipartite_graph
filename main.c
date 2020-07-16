@@ -5,8 +5,9 @@
 #include <document_reader.c>
 // #include <data_structures.h>
 
-int main(void){
-    GRAPH* graph = init_graph();
+int main(void)
+{
+    GRAPH *graph = init_graph();
 
     // Input de dados
     // FILE *file = fopen("test.txt", "r");
@@ -14,48 +15,63 @@ int main(void){
     assert(file);
     // role pode ser MOVIE, ACTOR ou EOF
     int role = MOVIE, movie, actor;
-    char*name = (char*) malloc(999*sizeof(char));
+    char *name = (char *)malloc(999 * sizeof(char));
 
-    while (role!=EOF){
-        if(role==MOVIE){
-            role = read_name(file,&name);
-            if(role==EOF) {break;}
+    while (role != EOF)
+    {
+        if (role == MOVIE)
+        {
+            role = read_name(file, &name);
+            if (role == EOF)
+            {
+                break;
+            }
             // printf("\nMOVIE %s\n",name);
 
             // retornar filme do momento e adiciona-lo
-            movie = ins_get_vertex(graph,name,MOVIE);
+            movie = ins_get_vertex(graph, name, MOVIE);
         }
-        if(role==ACTOR){
-            role = read_name(file,&name);
+        if (role == ACTOR)
+        {
+            role = read_name(file, &name);
 
             // printf("\nACTOR %s\n",name);
 
             // retornar posicao do ator e inserir-lo
-            actor = ins_get_vertex(graph,name,ACTOR);
+            actor = ins_get_vertex(graph, name, ACTOR);
             // ligar ator ao filme que participou
-            ins_edge(graph,movie,actor);
+            ins_edge(graph, movie, actor);
+        }
+    }
+
+    //menu
+    int origin = ins_get_vertex(graph, "Bacon, Kevin", ACTOR);
+    int option = -1;
+    while (option != 0)
+    {
+        printf("\nDigite 1 para buscar o numero de Kevin bacon de um ator, 2 para saber as informaçoes gerais e 0 para sair");
+        scanf(" %d", &option);
+        switch (option)
+        {
+        //buscar um ator
+        case 1:
+            printf("\nDigite o nome e sobrenome:");
+            scanf(" %[^\n]s",name);
+           actor = ins_get_vertex(graph, name, ACTOR);
+            search_actor(graph,origin,actor);
+            break;
+        //mundo de kevin
+        case 2:
+            break;
+        default:
+            break;
         }
     }
     fclose(file);
     free(name);
 
-    // print_graph(graph);
-    // getchar();
 
-    int origin = ins_get_vertex(graph,"Bacon, Kevin",ACTOR);
-
-    print_name(graph,origin);
-    // printf("graph nelem %d\n",graph->n_elem);
-
-    int *antecedents = (int*) calloc(graph->n_elem,sizeof(int));
-
-    // int*antecedents = visit_breadth(graph,origin);
-    // int*ok=visit_breadth(graph,origin);
-
-    // visit_breadth(graph,antecedents,origin);
-    visit_breadth(graph,origin);
-
-
+    search_actor(graph, origin, 505);
 
     return 0;
 }

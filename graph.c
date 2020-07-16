@@ -75,17 +75,16 @@ void print_graph(GRAPH*graph){
 }
 void print_name(GRAPH*graph,int pos){
     if(graph->elem[pos].role==MOVIE){
-        printf("MOVIE ");
+    printf(" atuou em %s com ",graph->elem[pos].name);  
     }
     else{
-        printf("ACTOR ");
+    printf("%s",graph->elem[pos].name);  
     }
-    printf("|%d| ",graph->elem[pos].n_adjacents);
-    printf("%s ",graph->elem[pos].name);  
-    for(int i = 0; i<graph->elem[pos].n_adjacents; i++){
+    //printf("|%d| ",graph->elem[pos].n_adjacents);
+    /*for(int i = 0; i<graph->elem[pos].n_adjacents; i++){
         printf(" %d,",graph->elem[pos].adjacents[i]);
     }
-    printf("\n");
+    printf("\n");*/
 }
 int first_adj(GRAPH*graph,int vertice){
     if(graph->elem[vertice].n_adjacents){
@@ -113,6 +112,129 @@ int pop(int*queue,int*n_elem){
     return front;
 }
 void visit_breadth(GRAPH*graph,int origin){
+    int p, has_waiting = 0, adj_counter;
+
+    int *color= (int*) calloc(graph->n_elem,sizeof(int));
+    int *queue= (int*) calloc(graph->n_elem,sizeof(int));
+    int *antecedents = (int*) calloc(graph->n_elem,sizeof(int));
+    for(int i = 0; i<graph->n_elem; i++){
+        color[i] = 0;
+        queue[i] =-1;
+        antecedents[i] = -1;
+    }
+
+    color[origin] = 1;
+    push(queue,&has_waiting,origin);
+
+    // printf("push %d ",queue[0]);
+    // print_name(graph,queue[0]);
+    // for(int i = 0; i<has_waiting; i++)
+    //     printf("_%d_",queue[i]);
+    // printf("\n");
+
+    while(has_waiting > 0){
+        // printf(" %4d\n",has_waiting);
+        origin = pop(queue,&has_waiting);
+
+        // printf("pop   %d  ",origin);
+        // for(int i = 0; i<has_waiting; i++)
+        //     printf("_%d_",queue[i]);
+        // printf("\n");
+        p = first_adj(graph,origin);
+        adj_counter = 0;
+        // printf("P %d\n",p);
+
+        while(p >= 0){
+            if(color[p]==0){
+                color[p]=1;
+                // printf(" %4d\n",has_waiting);
+                push(queue,&has_waiting,p);
+                antecedents[p] = origin;
+
+                // printf("push  %d  ",p);
+                // for(int i = 0; i<has_waiting; i++)
+                //     printf("_%d_",queue[i]);
+                // printf("\n");
+
+            }
+            p = next_adj(graph,origin,&adj_counter);
+        }
+        color[origin] = 2;
+    }
+    free(color);
+    free(queue);
+
+    printf("\n\nantecedents\n");
+
+    int i;
+    for(i = 0; i<graph->n_elem ; i++)
+        printf("%4d ",antecedents[i]);
+    printf("\n");
+    printf("%d vrs %d\n",i,graph->n_elem);
+
+}
+void search_actor(GRAPH*graph,int origin,int destiny){
+    int p, has_waiting = 0, adj_counter;
+
+    int *color= (int*) calloc(graph->n_elem,sizeof(int));
+    int *queue= (int*) calloc(graph->n_elem,sizeof(int));
+    int *antecedents = (int*) calloc(graph->n_elem,sizeof(int));
+    for(int i = 0; i<graph->n_elem; i++){
+        color[i] = 0;
+        queue[i] =-1;
+        antecedents[i] = -1;
+    }
+
+    color[origin] = 1;
+    push(queue,&has_waiting,origin);
+
+    while(has_waiting > 0){
+        origin = pop(queue,&has_waiting);
+
+        p = first_adj(graph,origin);
+        adj_counter = 0;
+
+        while(p >= 0){
+            if(color[p]==0){
+                color[p]=1;
+                push(queue,&has_waiting,p);
+                antecedents[p] = origin;
+
+            }
+            p = next_adj(graph,origin,&adj_counter);
+        }
+        color[origin] = 2;
+    }
+    if(antecedents[destiny] == -1){
+        printf("esse ator não se liga a Kevin bacon");
+        return;
+    }
+    int count =0;
+    int search = destiny;
+    int back[100];
+    back[count] = search;
+    while(search != origin && search != -1){
+        count++;
+        search = antecedents[search];
+        back[count] = search;
+    }
+    print_name(graph,destiny);
+     printf(" tem KB %d\n", (count/2));
+     int scount = 0;
+     for(int i = 0;i < count;i++){
+         scount++;
+         print_name(graph,back[i]);
+         if(scount == 3 && 3 != count){
+             printf("\n");
+         print_name(graph,back[i]);
+         }
+     }
+
+    free(color);
+    free(queue);
+
+}
+void world_kevin(GRAPH*graph,int origin){
     int p, has_waiting = 0, adj_counter;
 
     int *color= (int*) calloc(graph->n_elem,sizeof(int));
