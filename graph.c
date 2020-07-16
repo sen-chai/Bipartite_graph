@@ -1,3 +1,7 @@
+/*
+Lucas Martins NUSP 
+Sen Chai NUSP 10727830
+*/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -25,6 +29,30 @@ int name_compare(ITEM elem,char*name){
         return 1;
     }
     return 0;
+}
+// ler nome e dizer se o proximo eh filme ou ator
+int read_name(FILE*file,char**name ){
+    int read_counter = 0,flag;
+    char c = '0';
+    while( 1 ){
+        fscanf(file,"%c",&c);
+        if(feof(file)){
+            flag = EOF;
+            break;
+        }
+        if(c =='\n'){
+            name[read_counter] = '\0';
+            flag = MOVIE;
+            break;
+        }
+        if(c == '/'){
+            flag = ACTOR;
+            break;
+        }
+        (*name)[read_counter++] = c;
+    }
+    (*name)[read_counter] = '\0';
+    return flag;
 }
 void add_elem(GRAPH*graph,char*name,int role){
     int current_pos = graph->n_elem++;
@@ -57,6 +85,7 @@ void ins_edge(GRAPH*graph,int movie,int actor){
     graph->elem[actor].adjacents = (int*) realloc(graph->elem[actor].adjacents,graph->elem[actor].n_adjacents*sizeof(int));
     graph->elem[actor].adjacents[n_adj] = movie;
 }
+// print de todo o grafo
 void print_graph(GRAPH*graph){
     printf("N ITEMS %d",graph->n_elem);
     for(int i = 0; i<graph->n_elem ; i++){
@@ -74,6 +103,7 @@ void print_graph(GRAPH*graph){
     }
     printf("\n");
 }
+// dado o indice, printa ator e em qual filme pariticipou
 void print_name(GRAPH*graph,int pos){
     if(graph->elem[pos].role==MOVIE){
     printf(" atuou em \"%s\" com ",graph->elem[pos].name);  
@@ -81,11 +111,6 @@ void print_name(GRAPH*graph,int pos){
     else{
     printf("\"%s\"",graph->elem[pos].name);  
     }
-    //printf("|%d| ",graph->elem[pos].n_adjacents);
-    /*for(int i = 0; i<graph->elem[pos].n_adjacents; i++){
-        printf(" %d,",graph->elem[pos].adjacents[i]);
-    }
-    printf("\n");*/
 }
 int first_adj(GRAPH*graph,int vertice){
     if(graph->elem[vertice].n_adjacents){
@@ -112,68 +137,7 @@ int pop(int*queue,int*n_elem){
     (*n_elem)--;
     return front;
 }
-void visit_breadth(GRAPH*graph,int origin){
-    int p, has_waiting = 0, adj_counter;
-
-    int *color= (int*) calloc(graph->n_elem,sizeof(int));
-    int *queue= (int*) calloc(graph->n_elem,sizeof(int));
-    int *antecedents = (int*) calloc(graph->n_elem,sizeof(int));
-    for(int i = 0; i<graph->n_elem; i++){
-        color[i] = 0;
-        queue[i] =-1;
-        antecedents[i] = -1;
-    }
-
-    color[origin] = 1;
-    push(queue,&has_waiting,origin);
-
-    // printf("push %d ",queue[0]);
-    // print_name(graph,queue[0]);
-    // for(int i = 0; i<has_waiting; i++)
-    //     printf("_%d_",queue[i]);
-    // printf("\n");
-
-    while(has_waiting > 0){
-        // printf(" %4d\n",has_waiting);
-        origin = pop(queue,&has_waiting);
-
-        // printf("pop   %d  ",origin);
-        // for(int i = 0; i<has_waiting; i++)
-        //     printf("_%d_",queue[i]);
-        // printf("\n");
-        p = first_adj(graph,origin);
-        adj_counter = 0;
-        // printf("P %d\n",p);
-
-        while(p >= 0){
-            if(color[p]==0){
-                color[p]=1;
-                // printf(" %4d\n",has_waiting);
-                push(queue,&has_waiting,p);
-                antecedents[p] = origin;
-
-                // printf("push  %d  ",p);
-                // for(int i = 0; i<has_waiting; i++)
-                //     printf("_%d_",queue[i]);
-                // printf("\n");
-
-            }
-            p = next_adj(graph,origin,&adj_counter);
-        }
-        color[origin] = 2;
-    }
-    free(color);
-    free(queue);
-
-    printf("\n\nantecedents\n");
-
-    int i;
-    for(i = 0; i<graph->n_elem ; i++)
-        printf("%4d ",antecedents[i]);
-    printf("\n");
-    printf("%d vrs %d\n",i,graph->n_elem);
-
-}
+// busca o caminho do ator ate destiny, no caso caminho ate KB
 void search_actor(GRAPH*graph,int origin,int destiny){
     int p, has_waiting = 0, adj_counter;
 
@@ -237,6 +201,7 @@ void search_actor(GRAPH*graph,int origin,int destiny){
     free(antecedents);
 
 }
+// Mundo de Kevin Bacon com media e desvio padrao
 void kevin_world(GRAPH *graph,int origin){
     int p, has_waiting = 0, adj_counter;
 
