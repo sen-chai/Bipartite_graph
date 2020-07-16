@@ -49,7 +49,7 @@ int main(void)
     int option = -1;
     while (option != 0)
     {
-        printf("\nDigite 1 para buscar o numero de Kevin bacon de um ator, 2 para saber as informaçoes gerais e 0 para sair");
+        printf("\nDigite 1 para buscar o numero de Kevin bacon de um ator, 2 para saber as informaçoes gerais e 0 para sair:\n");
         scanf(" %d", &option);
         switch (option)
         {
@@ -69,9 +69,5 @@ int main(void)
     }
     fclose(file);
     free(name);
-
-
-    search_actor(graph, origin, 505);
-
     return 0;
 }

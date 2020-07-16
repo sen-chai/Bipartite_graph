@@ -75,10 +75,10 @@ void print_graph(GRAPH*graph){
 }
 void print_name(GRAPH*graph,int pos){
     if(graph->elem[pos].role==MOVIE){
-    printf(" atuou em %s com ",graph->elem[pos].name);  
+    printf(" atuou em \"%s\" com ",graph->elem[pos].name);  
     }
     else{
-    printf("%s",graph->elem[pos].name);  
+    printf("\"%s\"",graph->elem[pos].name);  
     }
     //printf("|%d| ",graph->elem[pos].n_adjacents);
     /*for(int i = 0; i<graph->elem[pos].n_adjacents; i++){
@@ -222,12 +222,13 @@ void search_actor(GRAPH*graph,int origin,int destiny){
      printf(" tem KB %d\n", (count/2));
      int scount = 0;
      for(int i = 0;i < count;i++){
-         scount++;
          print_name(graph,back[i]);
-         if(scount == 3 && 3 != count){
+         if(scount == 2 && i != count-1){
              printf("\n");
          print_name(graph,back[i]);
+         scount = 0;
          }
+         scount++;
      }
 
     free(color);
