@@ -62,6 +62,7 @@ int main(void)
             break;
         //mundo de kevin
         case 2:
+        kevin_world(graph,origin);
             break;
         default:
             break;

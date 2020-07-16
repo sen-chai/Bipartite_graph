@@ -3,6 +3,7 @@
 #include <string.h>
 #include <graph.h>
 #include <structures.c>
+#include <math.h>
 
 typedef struct {
     char* name;
@@ -233,9 +234,10 @@ void search_actor(GRAPH*graph,int origin,int destiny){
 
     free(color);
     free(queue);
+    free(antecedents);
 
 }
-void world_kevin(GRAPH*graph,int origin){
+void kevin_world(GRAPH *graph,int origin){
     int p, has_waiting = 0, adj_counter;
 
     int *color= (int*) calloc(graph->n_elem,sizeof(int));
@@ -250,50 +252,48 @@ void world_kevin(GRAPH*graph,int origin){
     color[origin] = 1;
     push(queue,&has_waiting,origin);
 
-    // printf("push %d ",queue[0]);
-    // print_name(graph,queue[0]);
-    // for(int i = 0; i<has_waiting; i++)
-    //     printf("_%d_",queue[i]);
-    // printf("\n");
-
     while(has_waiting > 0){
-        // printf(" %4d\n",has_waiting);
         origin = pop(queue,&has_waiting);
 
-        // printf("pop   %d  ",origin);
-        // for(int i = 0; i<has_waiting; i++)
-        //     printf("_%d_",queue[i]);
-        // printf("\n");
         p = first_adj(graph,origin);
         adj_counter = 0;
-        // printf("P %d\n",p);
 
         while(p >= 0){
             if(color[p]==0){
                 color[p]=1;
-                // printf(" %4d\n",has_waiting);
                 push(queue,&has_waiting,p);
                 antecedents[p] = origin;
-
-                // printf("push  %d  ",p);
-                // for(int i = 0; i<has_waiting; i++)
-                //     printf("_%d_",queue[i]);
-                // printf("\n");
 
             }
             p = next_adj(graph,origin,&adj_counter);
         }
         color[origin] = 2;
     }
+    int* distance = malloc(sizeof(int) * graph->n_elem);
+    int i,search,count, sum = 0;
+    float mean,std_deviation = 0;;
+    for(i=0;i < graph->n_elem;i++){
+        search = antecedents[i];
+        count = 0;
+        while(search != origin && search != -1){
+        count++;
+        search = antecedents[search];
+    }
+    sum += count/2;
+    distance[i] = count/2;
+    }
+    mean = 1.0*sum/graph->n_elem;
+
+    for(i=0;i < graph->n_elem;i++){
+    std_deviation += pow(distance[i] - mean,2);
+    }
+    std_deviation = sqrt((std_deviation/graph->n_elem));
+
+    printf("\nMedia dos números de Kevin Bacon: %f", mean);
+    printf("\nDesvio Padrão números de Kevin Bacon: %f", std_deviation);
     free(color);
     free(queue);
-
-    printf("\n\nantecedents\n");
-
-    int i;
-    for(i = 0; i<graph->n_elem ; i++)
-        printf("%4d ",antecedents[i]);
-    printf("\n");
-    printf("%d vrs %d\n",i,graph->n_elem);
+    free(distance);
+    free(antecedents);
 
 }
