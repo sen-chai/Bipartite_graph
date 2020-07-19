@@ -1,5 +1,5 @@
 /*
-Lucas Martins NUSP 
+Lucas Martins NUSP  11275126
 Sen Chai NUSP 10727830
 */
 #include <stdlib.h>

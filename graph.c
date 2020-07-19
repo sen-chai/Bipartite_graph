@@ -1,5 +1,5 @@
 /*
-Lucas Martins NUSP 
+Lucas Martins NUSP 11275126
 Sen Chai NUSP 10727830
 */
 #include <stdlib.h>
@@ -235,11 +235,12 @@ void kevin_world(GRAPH *graph,int origin){
         color[origin] = 2;
     }
     int* distance = malloc(sizeof(int) * graph->n_elem);
-    int i,search,count, sum = 0;
+    int i,search,count, sum = 0,mean_correction = 0;
     float mean,std_deviation = 0;;
     for(i=0;i < graph->n_elem;i++){
         search = antecedents[i];
         count = 0;
+        if(search == -1) mean_correction++;
         while(search != origin && search != -1){
         count++;
         search = antecedents[search];
@@ -247,18 +248,24 @@ void kevin_world(GRAPH *graph,int origin){
     sum += count/2;
     distance[i] = count/2;
     }
-    mean = 1.0*sum/graph->n_elem;
+    //os atores que não estão ligados a kb são computados como 0 na soma, e o mean_correction os tira da divisão 
+    mean = 1.0*sum/(graph->n_elem-mean_correction);
 
     for(i=0;i < graph->n_elem;i++){
+    if(distance[i] != -1){
     std_deviation += pow(distance[i] - mean,2);
-    }
-    std_deviation = sqrt((std_deviation/graph->n_elem));
-
+    }}
+    std_deviation = sqrt((std_deviation/(graph->n_elem-mean_correction)));
     printf("\nMedia dos números de Kevin Bacon: %f", mean);
     printf("\nDesvio Padrão números de Kevin Bacon: %f", std_deviation);
     free(color);
     free(queue);
     free(distance);
     free(antecedents);
+
+}
+void free_graph(GRAPH *graph){
+    
+
 
 }
