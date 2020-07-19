@@ -5,9 +5,11 @@ Sen Chai NUSP 10727830
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <graph.h>
-#include <structures.c>
 #include <math.h>
+
+#define NO_ADJACENTS -2
+#define ACTOR 0
+#define MOVIE 1
 
 typedef struct {
     char* name;
@@ -264,8 +266,12 @@ void kevin_world(GRAPH *graph,int origin){
     free(antecedents);
 
 }
+// liberar grafo
 void free_graph(GRAPH *graph){
-    
-
-
+    for(int i = 0; i<graph->n_elem ; i++){
+        free(graph->elem[i].name);
+        free(graph->elem[i].adjacents);
+    }
+    free(graph->elem);
+    free(graph);
 }

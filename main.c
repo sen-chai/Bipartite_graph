@@ -5,7 +5,6 @@ Sen Chai NUSP 10727830
 #include <stdlib.h>
 #include <stdio.h>
 #include <graph.c>
-#include <graph.h>
 #include <assert.h>
 
 int main(void)
@@ -68,5 +67,8 @@ int main(void)
     }
     fclose(file);
     free(name);
+    // liberar grafo
+    free_graph(graph);
+
     return 0;
 }
